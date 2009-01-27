@@ -83,4 +83,21 @@ function have_type(t)
   return matcher
 end
 
+function produce_error(message)
+  local matcher={}
+  matcher.match = function(what)
+    status,error_produced = pcall(what)
+    if status then
+      matcher.message = "Expected " .. showvalue(what) .. " to produce an error, but it didn't"
+      return false
+    elseif message and message ~= error_produced then
+      matcher.message = "Expected " .. showvalue(what) .. " to produce error message \"" .. message .. "\" but it produced \"" .. error_produced .. "\" instead"
+      return false
+    else
+      return true
+    end
+  end
+  return matcher
+end
+
 be_a = have_type
