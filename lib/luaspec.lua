@@ -9,9 +9,10 @@ function exp(expression)
   local table = {expression=expression}
   table.should = function(matcher)
     if not matcher.match(expression) then
-      local info = debug.getinfo(2, Sl)
-      local location = info.source .. ":" .. info.currentline .. ": "
-      errors[#errors + 1] = location .. matcher.message
+      -- local info = debug.getinfo(2, Sl)
+      -- local location = info.source .. ":" .. info.currentline .. ": "
+      -- errors[#errors + 1] = location .. matcher.message
+      error(matcher.message, 2)
     end
   end
   return table
@@ -46,7 +47,10 @@ function run_tests()
       all_errors[name] = all_errors[name] or {}
       all_errors[name][it_name] = all_errors[name][it_name] or {}
       errors = all_errors[name][it_name]
-      behavior()
+      status,message = pcall(behavior)
+      if not status then
+        errors[#errors+1] = message
+      end
     end
   end
   print_errors()
