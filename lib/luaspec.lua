@@ -12,6 +12,11 @@ function exp(expression)
       error(matcher.message, 2)
     end
   end
+  table.should_not = function(matcher)
+    if matcher.match(expression) then
+      error(matcher.message, 2)
+    end
+  end
   return table
 end
 
@@ -62,6 +67,7 @@ function equal(element)
   matcher.message = "Expected " .. showvalue(element) .. " but got "
   matcher.match = function(what)
     if what == element then
+      matcher.message = "Expected " .. showvalue(element) .. " to not be " .. showvalue(what) .. " but it was"
       return true
     else
       matcher.message = matcher.message .. showvalue(what)
@@ -75,6 +81,7 @@ function have_type(t)
   local matcher = {}
   matcher.match = function(what)
     if type(what) == t then
+      matcher.message = "Expected " .. showvalue(what) .. " to not be of type " .. t .. " but it was"
       return true
     else
       matcher.message = "Expected " .. showvalue(what) .. " to be of type " .. t .. " but it was of type " .. type(what)
@@ -95,7 +102,11 @@ function produce_error(message)
     elseif message and message ~= error_produced then
       matcher.message = "Expected " .. showvalue(what) .. " to produce error message \"" .. message .. "\" but it produced \"" .. error_produced .. "\" instead"
       return false
+    elseif message then
+      matcher.message = "Expected " .. showvalue(what) .. " to not produce error message \"" .. message .. "\" but it produced it"
+      return true
     else
+      matcher.message = "Expected " .. showvalue(what) .. " to not produce an error but it did"
       return true
     end
   end
