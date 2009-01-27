@@ -10,7 +10,7 @@ describe["Error matcher"] = function()
     exp(function() error("Boom") end).should(produce_error())
   end
   it["should produce an error when no error has been produced"] = function()
-    exp(exp(function() return "nothing" end).should(produce_error())).should(produce_error())
+    exp(function() exp(function() return "nothing" end).should(produce_error()) end).should(produce_error())
   end
 end
 
