@@ -1,0 +1,9 @@
+#!/usr/bin/lua
+
+require 'luaspec'
+
+for _,f in ipairs{...} do
+  dofile(f)
+end
+
+run_tests()
