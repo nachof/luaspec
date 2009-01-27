@@ -82,6 +82,7 @@ function have_type(t)
   end
   return matcher
 end
+be_a = have_type
 
 function produce_error(message)
   local matcher={}
@@ -99,5 +100,3 @@ function produce_error(message)
   end
   return matcher
 end
-
-be_a = have_type
