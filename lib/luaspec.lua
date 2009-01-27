@@ -9,9 +9,6 @@ function exp(expression)
   local table = {expression=expression}
   table.should = function(matcher)
     if not matcher.match(expression) then
-      -- local info = debug.getinfo(2, Sl)
-      -- local location = info.source .. ":" .. info.currentline .. ": "
-      -- errors[#errors + 1] = location .. matcher.message
       error(matcher.message, 2)
     end
   end
