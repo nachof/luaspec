@@ -15,4 +15,9 @@ describe["A mock"] = function()
     exp(function() m.method() end).should_not(produce_error())
     exp(function() m.other_method() end).should(produce_error())
   end
+  it["should be possible to specify a return value"] = function()
+    local m = mock("test")
+    m.expect_call("method").and_return("value")
+    exp(m.method()).should(equal("value"))
+  end
 end
