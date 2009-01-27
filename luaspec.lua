@@ -25,20 +25,6 @@ local function showvalue(value)
   end
 end
 
-function equal(element)
-  local matcher = {}
-  matcher.message = "Expected " .. showvalue(element) .. " but got "
-  matcher.match = function(what)
-    if what == element then
-      return true
-    else
-      matcher.message = matcher.message .. showvalue(what)
-      return false
-    end
-  end
-  return matcher
-end
-
 local function print_errors(whaterrors, prefix)
   prefix = prefix or ""
   whaterrors = whaterrors or all_errors
@@ -65,3 +51,36 @@ function run_tests()
   end
   print_errors()
 end
+
+--
+-- Matchers
+--
+
+function equal(element)
+  local matcher = {}
+  matcher.message = "Expected " .. showvalue(element) .. " but got "
+  matcher.match = function(what)
+    if what == element then
+      return true
+    else
+      matcher.message = matcher.message .. showvalue(what)
+      return false
+    end
+  end
+  return matcher
+end
+
+function have_type(t)
+  local matcher = {}
+  matcher.match = function(what)
+    if type(what) == t then
+      return true
+    else
+      matcher.message = "Expected " .. showvalue(what) .. " to be of type " .. t .. " but it was of type " .. type(what)
+      return false
+    end
+  end
+  return matcher
+end
+
+be_a = have_type
