@@ -20,4 +20,11 @@ describe["A mock"] = function()
     m.expect_call("method").and_return("value")
     exp(m.method()).should(equal("value"))
   end
+  it["should be possible to specify an argument"] = function()
+    local m = mock("test")
+    m.expect_call("method").with("param")
+    m.method("param")
+    exp(function() m.method() end).should(produce_error())
+    exp(function() m.method("param") end).should_not(produce_error())
+  end
 end
