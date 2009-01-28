@@ -19,3 +19,16 @@ describe["Equality matcher"] = function()
     exp(function() exp(1).should(equal(2)) end).should(produce_error())
   end
 end
+
+describe["Should function"] = function()
+  it["should call the match method on the matcher"] = function()
+    local matcher = mock("matcher")
+    matcher.expect_call("match").with("value").and_return(true)
+    exp("value").should(matcher)
+  end
+  it["should raise an error when the matcher returns false"] = function()
+    local matcher = mock("matcher")
+    matcher.expect_call("match").with("value").and_return(false)
+    exp(function() exp("value").should(matcher) end).should(produce_error())
+  end
+end
